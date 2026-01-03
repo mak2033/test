@@ -1,137 +1,509 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Categories</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <title>مكتبة خواطر | Khawater Library</title>
 
-<!-- GSAP -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <!-- Metadata لظهور الرابط بشكل احترافي في الواتساب -->
+    <meta name="description" content="أرقى دفاتر التخرج والأرواب المذهبة في الأردن. احتفل بتخرجك بفخامة تليق بك.">
+    <meta property="og:title" content="مكتبة خواطر - Luxury Graduation Archive">
+    <meta property="og:description" content="تصفح أرقى مجموعات دفاتر التخرج وأرواب الماستر والبكالوريوس. تميزك هو شغفنا.">
+    <meta property="og:image" content="images/Main_notebook.jpg"> 
+    <meta property="og:type" content="website">
+    <meta name="theme-color" content="#0F172A">
 
-<style>
-/* ================= RESET ================= */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  -webkit-tap-highlight-color: transparent;
-}
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&family=Montserrat:wght@300;600&display=swap" rel="stylesheet">
+    
+    <!-- Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- استدعاء Lucide Icons بشكل مضمون -->
+    <script src="https://unpkg.com/lucide@latest"></script>
 
-body {
-  font-family: Arial, sans-serif;
-  background: #0e0e0e;
-  color: #fff;
-}
+    <style>
+        :root {
+            --navy: #0F172A;
+            --gold: #D4AF37;
+            --alabaster: #F8FAFC;
+        }
 
-/* ================= CONTAINER ================= */
-.categories {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 20px;
-  padding: 30px;
-}
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: var(--alabaster);
+            color: var(--navy);
+            overflow-x: hidden;
+            width: 100%;
+            -webkit-tap-highlight-color: transparent;
+        }
 
-/* ================= CARD ================= */
-.category-card {
-  position: relative;
-  height: 260px;
-  border-radius: 18px;
-  overflow: hidden;
-  cursor: pointer;
-  background: #000;
-  transform: translateZ(0);
-}
+        /* تعديل: جعل العناصر مرئية افتراضياً وحلها عبر JS */
+        .category-card {
+            height: 420px;
+            cursor: pointer;
+            overflow: hidden;
+            position: relative;
+            border-radius: 2rem;
+            background-color: #f1f5f9;
+            box-shadow: 0 10px 25px -10px rgba(0,0,0,0.1);
+            z-index: 10;
+        }
 
-/* IMAGE */
-.category-card img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
+        @media (min-width: 768px) {
+            .category-card { height: 500px; border-radius: 2.5rem; }
+        }
 
-/* OVERLAY */
-.category-card::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to top, rgba(0,0,0,.65), rgba(0,0,0,.1));
-  z-index: 1;
-}
+        .category-card .card-bg {
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+            transition: transform 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
 
-/* CONTENT */
-.category-card .content {
-  position: absolute;
-  bottom: 20px;
-  left: 20px;
-  z-index: 2;
-}
+        .category-card:hover .card-bg { transform: scale(1.1); }
 
-.category-card h3 {
-  font-size: 22px;
-  font-weight: 600;
-}
+        .category-card .overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom, rgba(15, 23, 42, 0.1), rgba(15, 23, 42, 0.9));
+            z-index: 1;
+        }
 
-/* ================= DESKTOP HOVER ================= */
-@media (hover: hover) {
-  .category-card:hover img {
-    transform: scale(1.08);
-    transition: transform .5s ease;
-  }
-}
+        .category-card .content {
+            position: relative;
+            z-index: 2;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 1.5rem;
+            color: white;
+            pointer-events: none;
+        }
 
-/* ================= MOBILE FIX ================= */
-/* 🔴 أهم سطر لحل المشكلة */
-.category-card {
-  opacity: 1;
-  transform: none;
-}
+        .social-bar {
+            position: fixed;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            z-index: 150;
+        }
 
-/* ================= MOBILE LAYOUT ================= */
-@media (max-width: 767px) {
-  .categories {
-    grid-template-columns: 1fr;
-    padding: 16px;
-  }
+        @media (max-width: 767px) {
+            .social-bar {
+                top: auto;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                transform: none;
+                flex-direction: row;
+                justify-content: center;
+                background: rgba(255, 255, 255, 0.95);
+                backdrop-filter: blur(10px);
+                padding: 12px;
+                border-top: 1px solid #eee;
+                width: 100%;
+            }
+        }
 
-  .category-card {
-    height: 200px;
-  }
-}
-</style>
+        .social-icon {
+            width: 45px;
+            height: 45px;
+            background: white;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--navy);
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        .social-icon:hover { background: var(--gold); color: white; transform: scale(1.1); }
+
+        .gallery-item {
+            aspect-ratio: 4/5;
+            overflow: hidden;
+            border-radius: 1.5rem;
+            cursor: pointer;
+            background: #cbd5e1;
+            transition: all 0.4s ease;
+        }
+
+        #modal {
+            display: none;
+            backdrop-filter: blur(25px);
+            background: rgba(15, 23, 42, 0.96);
+            z-index: 200;
+        }
+
+        .btn-whatsapp {
+            background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+            box-shadow: 0 10px 30px rgba(37, 211, 102, 0.4);
+        }
+
+        .active-thumb { border: 3px solid var(--gold); transform: scale(1.1); }
+        .filmstrip-container::-webkit-scrollbar { display: none; }
+        .filmstrip-container { -ms-overflow-style: none; scrollbar-width: none; }
+
+        @keyframes floating { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-8px); } }
+        .float-icon { animation: floating 4s ease-in-out infinite; }
+
+        i[data-lucide] {
+            width: 20px;
+            height: 20px;
+            stroke-width: 2;
+        }
+    </style>
 </head>
+<body class="min-h-screen">
 
-<body>
+    <!-- Social Sidebar -->
+    <div class="social-bar" id="socialBar">
+        <a href="https://instagram.com" target="_blank" class="social-icon" title="Instagram"><i data-lucide="instagram"></i></a>
+        <a href="https://facebook.com" target="_blank" class="social-icon" title="Facebook"><i data-lucide="facebook"></i></a>
+        <a href="tel:0780235959" class="social-icon" title="Call Us"><i data-lucide="phone"></i></a>
+    </div>
 
-<section class="categories">
-  <a class="category-card" href="category1.html">
-    <img src="https://picsum.photos/id/1015/600/600" alt="">
-    <div class="content"><h3>Nature</h3></div>
-  </a>
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-[110] px-4 md:px-8 py-4 flex justify-between items-center bg-white/90 backdrop-blur-xl border-b border-gray-100 shadow-sm">
+        <div class="flex items-center gap-2 cursor-pointer" onclick="goHome()">
+            <div class="w-10 h-10 md:w-12 md:h-12 bg-navy rounded-xl md:rounded-2xl flex items-center justify-center text-gold border border-gold/30">
+                <i data-lucide="graduation-cap" class="float-icon"></i>
+            </div>
+            <div>
+                <h1 class="text-xl md:text-2xl font-black tracking-tighter text-navy leading-none">مكتبة <span class="text-gold">خواطر</span></h1>
+                <p class="text-[8px] md:text-[10px] uppercase tracking-[0.2em] text-gray-400 font-bold">The Luxury Archive</p>
+            </div>
+        </div>
+        
+        <div class="flex items-center gap-4">
+            <div class="hidden md:flex gap-6 text-sm font-bold text-navy/60">
+                <button onclick="goHome()" class="hover:text-gold transition-colors">الرئيسية</button>
+                <button onclick="scrollToFooter()" class="hover:text-gold transition-colors">اتصل بنا</button>
+            </div>
+            <button class="flex items-center gap-2 border-2 border-navy/10 px-3 py-1.5 md:px-4 md:py-2 rounded-lg md:rounded-xl hover:bg-navy hover:text-white transition-all">
+                <i data-lucide="languages" class="w-4 h-4"></i>
+                <span class="text-[10px] md:text-xs font-bold uppercase font-sans">EN</span>
+            </button>
+        </div>
+    </nav>
 
-  <a class="category-card" href="category2.html">
-    <img src="https://picsum.photos/id/1025/600/600" alt="">
-    <div class="content"><h3>Animals</h3></div>
-  </a>
+    <!-- Main Content -->
+    <main class="pt-28 md:pt-40 pb-24 md:pb-20 px-4 md:px-6 max-w-7xl mx-auto">
+        
+        <!-- Home View -->
+        <section id="homeView">
+            <header class="text-center mb-12 md:mb-20" id="heroHeader">
+                <h2 class="text-4xl md:text-7xl font-black mb-4 md:mb-6 leading-tight text-navy">احتفل بتخرجك <br><span class="text-gold">بفخامة تليق بك</span></h2>
+                <p class="text-gray-500 text-sm md:text-xl max-w-2xl mx-auto leading-relaxed px-4">أرقى دفاتر التخرج والأرواب المختارة بعناية لتخليد أجمل ذكرياتك الدراسية.</p>
+            </header>
 
-  <a class="category-card" href="category3.html">
-    <img src="https://picsum.photos/id/1035/600/600" alt="">
-    <div class="content"><h3>Architecture</h3></div>
-  </a>
-</section>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-10" id="cardGrid">
+                <!-- Notebook -->
+                <div onclick="openCategory('notebook', 'دفاتر تخرج')" class="category-card group">
+                    <img src="32694.jpg" class="card-bg w-full h-full object-cover" onerror="this.src='https://images.unsplash.com/photo-1544816155-12df9643f363?q=80&w=800'">
+                    <div class="overlay"></div>
+                    <div class="content">
+                        <div>
+                            <span class="text-[10px] font-black text-gold uppercase tracking-[0.3em] mb-2 block">Archive Edition</span>
+                            <h3 class="text-2xl md:text-4xl font-black mt-2">دفاتر تخرج</h3>
+                        </div>
+                        <div class="flex justify-between items-end">
+                            <p class="text-gray-200 text-xs md:text-sm leading-relaxed max-w-[150px]">دون ذكرياتك في أرقى الدفاتر المذهبة.</p>
+                            <div class="w-10 h-10 md:w-14 md:h-14 bg-white/20 backdrop-blur-md text-gold rounded-xl md:rounded-2xl flex items-center justify-center border border-white/20">
+                                <i data-lucide="chevron-left"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-<script>
-/* ================= GSAP (SAFE) ================= */
-if (window.innerWidth > 768) {
-  gsap.from(".category-card", {
-    opacity: 0,
-    y: 30,
-    duration: 0.9,
-    stagger: 0.15,
-    ease: "power3.out"
-  });
-}
-</script>
+                <!-- Bachelor -->
+                <div onclick="openCategory('robe_bachelor', 'أرواب تخرج')" class="category-card group">
+                    <img src="32693.jpg" class="card-bg w-full h-full object-cover" onerror="this.src='https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=80&w=800'">
+                    <div class="overlay"></div>
+                    <div class="content">
+                        <div>
+                            <span class="text-[10px] font-black text-gold uppercase tracking-[0.3em] mb-2 block">Bachelor's Series</span>
+                            <h3 class="text-2xl md:text-4xl font-black mt-2">أرواب تخرج</h3>
+                        </div>
+                        <div class="flex justify-between items-end">
+                            <p class="text-gray-200 text-xs md:text-sm leading-relaxed max-w-[150px]">أرواب مصممة بدقة عالية وأقمشة فاخرة.</p>
+                            <div class="w-10 h-10 md:w-14 md:h-14 bg-white/20 backdrop-blur-md text-gold rounded-xl md:rounded-2xl flex items-center justify-center border border-white/20">
+                                <i data-lucide="chevron-left"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
+                <!-- Master -->
+                <div onclick="openCategory('robe_master', 'أرواب الماستر')" class="category-card group">
+                    <img src="32692.jpg" class="card-bg w-full h-full object-cover" onerror="this.src='https://images.unsplash.com/photo-1541339907198-e08756ebafe3?q=80&w=800'">
+                    <div class="overlay"></div>
+                    <div class="content">
+                        <div>
+                            <span class="text-[10px] font-black text-gold uppercase tracking-[0.3em] mb-2 block">Master's Elite</span>
+                            <h3 class="text-2xl md:text-4xl font-black mt-2">أرواب الماستر</h3>
+                        </div>
+                        <div class="flex justify-between items-end">
+                            <p class="text-gray-200 text-xs md:text-sm leading-relaxed max-w-[150px]">تميز بتفاصيل مذهبة تعكس هيبة إنجازك.</p>
+                            <div class="w-10 h-10 md:w-14 md:h-14 bg-white/20 backdrop-blur-md text-gold rounded-xl md:rounded-2xl flex items-center justify-center border border-white/20">
+                                <i data-lucide="chevron-left"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Gallery View -->
+        <section id="galleryView" class="hidden">
+            <div class="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
+                <div class="flex items-center gap-4">
+                    <button onclick="goHome()" class="w-10 h-10 md:w-14 md:h-14 rounded-xl border-2 border-gray-100 flex items-center justify-center hover:bg-navy hover:text-white transition-all bg-white shadow-sm">
+                        <i data-lucide="arrow-right"></i>
+                    </button>
+                    <h2 id="galleryTitle" class="text-2xl md:text-4xl font-black text-navy">اسم القسم</h2>
+                </div>
+                <div class="text-gray-400 font-bold text-xs bg-white px-4 py-2 rounded-full border border-gray-100 shadow-sm">
+                    <span id="itemCount">0</span> منتج
+                </div>
+            </div>
+            <div id="imageGrid" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-8"></div>
+            <div id="galleryLoader" class="flex flex-col items-center justify-center py-20 hidden">
+                <div class="w-10 h-10 border-4 border-gold border-t-transparent rounded-full animate-spin mb-4"></div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer id="mainFooter" class="py-12 md:py-20 px-6 bg-slate-900 text-white">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-12">
+            <div class="space-y-4">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-white/10 rounded-xl flex items-center justify-center text-gold"><i data-lucide="graduation-cap"></i></div>
+                    <h3 class="text-xl font-black">مكتبة <span class="text-gold">خواطر</span></h3>
+                </div>
+                <p class="text-gray-400 text-sm leading-relaxed">أرقى مستلزمات التخرج في الأردن. تميزك في يومك الكبير هو شغفنا الأول.</p>
+                <!-- الروابط الاجتماعية في الفوتر -->
+                <div class="flex gap-4 pt-4">
+                    <a href="https://instagram.com" target="_blank" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-gold transition-colors"><i data-lucide="instagram" class="w-4 h-4"></i></a>
+                    <a href="https://facebook.com" target="_blank" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-gold transition-colors"><i data-lucide="facebook" class="w-4 h-4"></i></a>
+                    <a href="tel:0780235959" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-gold transition-colors"><i data-lucide="phone" class="w-4 h-4"></i></a>
+                </div>
+            </div>
+            <div>
+                <h4 class="text-gold font-bold mb-4 uppercase tracking-widest text-xs">روابط سريعة</h4>
+                <ul class="text-gray-400 text-sm space-y-3">
+                    <li><button onclick="goHome()" class="hover:text-white transition-colors">الصفحة الرئيسية</button></li>
+                    <li><button onclick="scrollToFooter()" class="hover:text-white transition-colors">تواصل معنا</button></li>
+                    <li><button onclick="openCategory('notebook', 'دفاتر تخرج')" class="hover:text-white transition-colors">دفاتر التخرج</button></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="text-gold font-bold mb-4 uppercase tracking-widest text-xs">اتصل بنا</h4>
+                <p class="text-gray-400 text-sm">عمان، الأردن</p>
+                <p class="text-white font-bold mt-2 text-lg font-sans" dir="ltr">0780235959</p>
+            </div>
+        </div>
+        <div class="max-w-7xl mx-auto mt-12 md:mt-16 pt-8 border-t border-white/5 text-center text-gray-500 text-[10px] md:text-sm">
+            &copy; 2026 مكتبة خواطر. جميع الحقوق محفوظة.
+        </div>
+    </footer>
+
+    <!-- Modal Viewer -->
+    <div id="modal" class="fixed inset-0 flex flex-col items-center justify-center p-4" onclick="handleOutsideClick(event)">
+        <!-- زر الإغلاق -->
+        <button onclick="closeModal()" class="absolute top-4 right-4 text-white bg-white/10 p-3 rounded-xl z-[220] hover:bg-white/20 transition-colors">
+            <i data-lucide="x" size="24"></i>
+        </button>
+
+        <!-- مسرح الصورة -->
+        <div class="relative w-full max-w-5xl flex items-center justify-center h-[50vh] md:h-[65vh]" onclick="event.stopPropagation()">
+            <button onclick="prevImage()" class="absolute left-2 md:-left-20 z-10 bg-white/10 hover:bg-white/20 p-3 md:p-5 rounded-full text-white transition-all">
+                <i data-lucide="chevron-left" size="24"></i>
+            </button>
+            
+            <img id="modalMainImg" src="" class="max-h-full max-w-full object-contain rounded-2xl shadow-2xl border-2 border-white/10 transition-all duration-300">
+            
+            <button onclick="nextImage()" class="absolute right-2 md:-right-20 z-10 bg-white/10 hover:bg-white/20 p-3 md:p-5 rounded-full text-white transition-all">
+                <i data-lucide="chevron-right" size="24"></i>
+            </button>
+        </div>
+
+        <!-- زر واتساب -->
+        <div class="mt-8 relative z-[220]" onclick="event.stopPropagation()">
+            <a id="whatsappBtn" href="#" target="_blank" class="btn-whatsapp px-8 py-4 rounded-xl text-white font-black flex items-center gap-3 active:scale-95 transition-transform">
+                <i data-lucide="message-circle" size="22"></i>اطلب عبر واتساب
+            </a>
+        </div>
+
+        <!-- شريط الصور السفلي -->
+        <div class="absolute bottom-0 w-full bg-slate-900/90 p-4 border-t border-white/5 backdrop-blur-md" onclick="event.stopPropagation()">
+            <div id="filmstrip" class="filmstrip-container flex gap-3 overflow-x-auto pb-2 px-2 scroll-smooth"></div>
+        </div>
+    </div>
+
+    <script>
+        /**
+         * قاعدة بيانات الصور
+         */
+        const IMAGE_DATABASE = {
+            notebook: [
+                '32694.jpg', 'images/notebook/2.jpg', 'images/notebook/3.jpg'
+            ],
+            robe_bachelor: [
+                '32693.jpg', 'images/robe_bachelor/2.jpg'
+            ],
+            robe_master: [
+                '32692.jpg', 'images/robe_master/2.jpg'
+            ]
+        };
+
+        let currentImages = []; 
+        let currentIndex = 0; 
+        const WHATSAPP_NUM = '962780235959';
+
+        // استخدام DOMContentLoaded لضمان التحميل السريع على الموبايل
+        document.addEventListener('DOMContentLoaded', () => { 
+            if (window.lucide) {
+                lucide.createIcons(); 
+            }
+            startEntranceAnimation(); 
+            history.replaceState({view: 'home'}, "");
+        });
+
+        window.onpopstate = (event) => {
+            const modal = document.getElementById('modal');
+            const galleryView = document.getElementById('galleryView');
+            
+            if (modal.style.display === 'flex') {
+                closeModal(false);
+            } else if (!galleryView.classList.contains('hidden')) {
+                goHome(false);
+            }
+        };
+
+        function handleOutsideClick(e) {
+            if (e.target.id === 'modal') {
+                closeModal();
+            }
+        }
+
+        function startEntranceAnimation() { 
+            // استخدام GSAP لإظهار العناصر بسلاسة
+            gsap.fromTo("#heroHeader", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 1, ease: "power4.out" }); 
+            gsap.fromTo(".category-card", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 1, stagger: 0.15, delay: 0.3, ease: "power4.out" }); 
+        }
+
+        async function openCategory(cat, title) { 
+            document.getElementById('galleryTitle').innerText = title; 
+            history.pushState({view: 'gallery', cat: cat}, "");
+
+            gsap.to("#homeView", { opacity: 0, duration: 0.3, onComplete: () => { 
+                document.getElementById('homeView').classList.add('hidden'); 
+                document.getElementById('galleryView').classList.remove('hidden'); 
+                gsap.fromTo("#galleryView", { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.5 }); 
+                loadGalleryImages(cat); 
+                window.scrollTo({top: 0, behavior: 'smooth'}); 
+            }}); 
+        }
+
+        function goHome(shouldPopHistory = true) { 
+            if (shouldPopHistory) history.back();
+            gsap.to("#galleryView", { opacity: 0, duration: 0.3, onComplete: () => { 
+                document.getElementById('galleryView').classList.add('hidden'); 
+                document.getElementById('homeView').classList.remove('hidden'); 
+                gsap.fromTo("#homeView", { opacity: 0, y: -10 }, { opacity: 1, y: 0, duration: 0.5 }); 
+                window.scrollTo({top: 0, behavior: 'smooth'}); 
+            }}); 
+        }
+
+        function scrollToFooter() { document.getElementById('mainFooter').scrollIntoView({ behavior: 'smooth' }); }
+
+        function loadGalleryImages(cat) { 
+            const grid = document.getElementById('imageGrid'); 
+            const loader = document.getElementById('galleryLoader'); 
+            grid.innerHTML = ''; 
+            loader.classList.remove('hidden'); 
+            
+            setTimeout(() => {
+                const images = IMAGE_DATABASE[cat] || [];
+                renderGallery(images);
+                loader.classList.add('hidden');
+            }, 300);
+        }
+
+        function renderGallery(images) { 
+            const grid = document.getElementById('imageGrid'); 
+            currentImages = images; 
+            document.getElementById('itemCount').innerText = images.length; 
+            images.forEach((img, idx) => { 
+                const item = document.createElement('div'); 
+                item.className = 'gallery-item'; 
+                item.setAttribute('onclick', `openModal(${idx})`);
+                item.innerHTML = `<img src="${img}" class="w-full h-full object-cover" loading="lazy" onerror="this.src='https://via.placeholder.com/400x500?text=Product'">`; 
+                grid.appendChild(item); 
+                gsap.fromTo(item, { opacity: 0, scale: 0.9 }, { opacity: 1, scale: 1, duration: 0.4, delay: idx * 0.05 }); 
+            }); 
+        }
+
+        function openModal(idx) { 
+            currentIndex = idx; 
+            history.pushState({view: 'modal'}, "");
+            const modal = document.getElementById('modal'); 
+            const filmstrip = document.getElementById('filmstrip'); 
+            modal.style.display = 'flex'; 
+            document.body.style.overflow = 'hidden'; 
+            filmstrip.innerHTML = ''; 
+            
+            currentImages.forEach((img, i) => { 
+                const thumb = document.createElement('img'); 
+                thumb.src = img; 
+                thumb.className = `h-14 w-14 md:h-20 md:w-20 object-cover rounded-xl cursor-pointer ${i === idx ? 'active-thumb' : 'opacity-40'}`; 
+                thumb.onclick = (e) => { e.stopPropagation(); currentIndex = i; updateModalView(); }; 
+                filmstrip.appendChild(thumb); 
+            }); 
+            updateModalView(); 
+        }
+
+        function updateModalView() { 
+            const mainImg = document.getElementById('modalMainImg'); 
+            gsap.to(mainImg, { opacity: 0, duration: 0.15, onComplete: () => { 
+                mainImg.src = currentImages[currentIndex]; 
+                gsap.to(mainImg, { opacity: 1, duration: 0.3 }); 
+            }}); 
+            const thumbs = document.querySelectorAll('#filmstrip img'); 
+            thumbs.forEach((t, i) => { 
+                if(i === currentIndex) { t.classList.add('active-thumb'); t.classList.remove('opacity-40'); } 
+                else { t.classList.remove('active-thumb'); t.classList.add('opacity-40'); }
+            }); 
+            
+            const baseUrl = window.location.origin + window.location.pathname;
+            const waMsg = encodeURIComponent(`مرحباً مكتبة خواطر، أود الاستفسار عن هذا التصميم: ${baseUrl}#${currentImages[currentIndex]}`);
+            document.getElementById('whatsappBtn').href = `https://wa.me/${WHATSAPP_NUM}?text=${waMsg}`; 
+            
+            const strip = document.getElementById('filmstrip'); 
+            const active = strip.children[currentIndex]; 
+            if (active) strip.scrollTo({ left: active.offsetLeft - (strip.offsetWidth / 2) + (active.offsetWidth / 2), behavior: 'smooth' }); 
+        }
+
+        function nextImage() { currentIndex = (currentIndex + 1) % currentImages.length; updateModalView(); }
+        function prevImage() { currentIndex = (currentIndex - 1 + currentImages.length) % currentImages.length; updateModalView(); }
+        
+        function closeModal(shouldPopHistory = true) { 
+            if (shouldPopHistory) history.back();
+            document.getElementById('modal').style.display = 'none'; 
+            document.body.style.overflow = 'auto'; 
+        }
+    </script>
 </body>
 </html>
