@@ -2,9 +2,20 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
+    <!-- إعدادات العرض للهاتف لضمان عدم حدوث زووم تلقائي وتحسين اللمس -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>مكتبة خواطر | Khawater Library</title>
     
+    <title>مكتبة خواطر | Khawater Library</title>
+
+    <!-- Metadata لظهور الرابط بشكل احترافي في الواتساب -->
+    <meta name="description" content="أرقى دفاتر التخرج والأرواب المذهبة في الأردن. احتفل بتخرجك بفخامة تليق بك.">
+    <meta property="og:title" content="مكتبة خواطر - Luxury Graduation Archive">
+    <meta property="og:description" content="تصفح أرقى مجموعات دفاتر التخرج وأرواب الماستر والبكالوريوس. تميزك هو شغفنا.">
+    <meta property="og:image" content="https://raw.githubusercontent.com/username/repo/main/images/Main_notebook.jpg"> <!-- استبدل هذا الرابط برابط صورتك المرفوعة على جيت هاب -->
+    <meta property="og:url" content="https://your-username.github.io/your-repo-name/">
+    <meta property="og:type" content="website">
+    <meta name="theme-color" content="#0F172A">
+
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -28,14 +39,10 @@
             color: var(--navy);
             overflow-x: hidden;
             width: 100%;
-            -webkit-tap-highlight-color: transparent;
+            -webkit-tap-highlight-color: transparent; /* يمنع ظهور المربع الأزرق عند اللمس في الهاتف */
         }
 
-        /* Animation Pre-states */
-        #heroHeader, .category-card {
-            opacity: 0;
-            transform: translateY(20px);
-        }
+        #heroHeader, .category-card { opacity: 0; transform: translateY(20px); }
 
         .category-card {
             height: 420px;
@@ -45,6 +52,7 @@
             border-radius: 2rem;
             background-color: #f1f5f9;
             box-shadow: 0 10px 25px -10px rgba(0,0,0,0.1);
+            z-index: 10;
         }
 
         @media (min-width: 768px) {
@@ -76,9 +84,8 @@
             justify-content: space-between;
             padding: 1.5rem;
             color: white;
+            pointer-events: none; /* يسمح للنقرة بالمرور للبطاقة نفسها */
         }
-
-        @media (min-width: 768px) { .category-card .content { padding: 2.5rem; } }
 
         .social-bar {
             position: fixed;
@@ -88,7 +95,7 @@
             display: flex;
             flex-direction: column;
             gap: 15px;
-            z-index: 100;
+            z-index: 120;
         }
 
         @media (max-width: 767px) {
@@ -121,8 +128,6 @@
             transition: all 0.3s ease;
         }
 
-        .social-icon:hover { background: var(--gold); color: white; transform: scale(1.1); }
-
         .gallery-item {
             aspect-ratio: 4/5;
             overflow: hidden;
@@ -131,13 +136,13 @@
             background: #cbd5e1;
             transition: all 0.4s ease;
             opacity: 0;
-            transform: translateY(10px);
         }
 
         #modal {
             display: none;
             backdrop-filter: blur(25px);
             background: rgba(15, 23, 42, 0.98);
+            z-index: 200;
         }
 
         .btn-whatsapp {
@@ -192,7 +197,7 @@
         <!-- Home View -->
         <section id="homeView">
             <header class="text-center mb-12 md:mb-20" id="heroHeader">
-                <h2 class="text-3xl md:text-7xl font-black mb-4 md:mb-6 leading-tight text-navy">احتفل بتخرجك <br><span class="text-gold">بفخامة تليق بك</span></h2>
+                <h2 class="text-3xl md:text-7xl font-black mb-4 md:mb-6 leading-tight">احتفل بتخرجك <br><span class="text-gold">بفخامة تليق بك</span></h2>
                 <p class="text-gray-500 text-sm md:text-xl max-w-2xl mx-auto leading-relaxed px-4">أرقى دفاتر التخرج والأرواب المختارة بعناية لتخليد أجمل ذكرياتك الدراسية.</p>
             </header>
 
@@ -257,7 +262,7 @@
         <section id="galleryView" class="hidden">
             <div class="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
                 <div class="flex items-center gap-4">
-                    <button onclick="goHome()" class="w-10 h-10 md:w-14 md:h-14 rounded-xl border-2 border-gray-100 flex items-center justify-center hover:bg-navy hover:text-white transition-all">
+                    <button onclick="goHome()" class="w-10 h-10 md:w-14 md:h-14 rounded-xl border-2 border-gray-100 flex items-center justify-center hover:bg-navy hover:text-white transition-all bg-white">
                         <i data-lucide="arrow-right" size="20"></i>
                     </button>
                     <h2 id="galleryTitle" class="text-2xl md:text-4xl font-black text-navy">اسم القسم</h2>
@@ -302,15 +307,15 @@
     </footer>
 
     <!-- Modal Viewer -->
-    <div id="modal" class="fixed inset-0 z-[200] flex flex-col items-center justify-center p-4">
-        <button onclick="closeModal()" class="absolute top-4 right-4 text-white bg-white/10 p-3 rounded-xl"><i data-lucide="x" size="24"></i></button>
-        <div class="relative w-full max-w-5xl flex items-center justify-center h-[50vh] md:h-[60vh]">
-            <button onclick="prevImage()" class="absolute -right-4 md:-right-16 z-10 bg-white/10 p-3 md:p-5 rounded-full text-white"><i data-lucide="chevron-right" size="24"></i></button>
-            <img id="modalMainImg" src="" class="max-h-full max-w-full object-contain rounded-2xl shadow-2xl border-2 border-white/10 transition-all">
-            <button onclick="nextImage()" class="absolute -left-4 md:-left-16 z-10 bg-white/10 p-3 md:p-5 rounded-full text-white"><i data-lucide="chevron-left" size="24"></i></button>
+    <div id="modal" class="fixed inset-0 flex flex-col items-center justify-center p-4">
+        <button onclick="closeModal()" class="absolute top-4 right-4 text-white bg-white/10 p-3 rounded-xl z-50"><i data-lucide="x" size="24"></i></button>
+        <div class="relative w-full max-w-5xl flex items-center justify-center h-[50vh] md:h-[65vh]">
+            <button onclick="prevImage()" class="absolute left-2 md:-left-20 z-10 bg-white/10 p-3 md:p-5 rounded-full text-white"><i data-lucide="chevron-left" size="24"></i></button>
+            <img id="modalMainImg" src="" class="max-h-full max-w-full object-contain rounded-2xl shadow-2xl border-2 border-white/10 transition-all duration-300">
+            <button onclick="nextImage()" class="absolute right-2 md:-right-20 z-10 bg-white/10 p-3 md:p-5 rounded-full text-white"><i data-lucide="chevron-right" size="24"></i></button>
         </div>
-        <div class="mt-8">
-            <a id="whatsappBtn" href="#" target="_blank" class="btn-whatsapp px-8 py-4 rounded-xl text-white font-black flex items-center gap-3">
+        <div class="mt-8 relative z-50">
+            <a id="whatsappBtn" href="#" target="_blank" class="btn-whatsapp px-8 py-4 rounded-xl text-white font-black flex items-center gap-3 active:scale-95 transition-transform">
                 <i data-lucide="message-circle" size="20"></i>اطلب عبر واتساب
             </a>
         </div>
@@ -321,23 +326,24 @@
 
     <script>
         /**
-         * داتا الصور - قم بتعديل الأسماء هنا لتطابق الصور في مجلداتك
-         * GitHub Pages لا يدعم PHP، لذا يجب تعريف الصور يدوياً هنا.
+         * داتا الصور - GitHub Pages لا يدعم PHP لذا يجب تعريف الملفات هنا يدوياً.
+         * تأكد أن أسماء الصور مطابقة تماماً لحالة الأحرف (Lowercase/Uppercase).
          */
         const IMAGE_DATABASE = {
             notebook: [
-                'images/notebook/main_notebook.jpg.jpeg'
+                'images/notebook/1.jpg',
+                'images/notebook/2.jpg',
+                'images/notebook/3.jpg'
             ],
-
             robe_bachelor: [
-                'images/robe/main_robe.jpeg'
+                'images/robe_bachelor/1.jpg',
+                'images/robe_bachelor/2.jpg'
             ],
-
             robe_master: [
-                'images/robe_master/main_stole.jpg.jpeg'
+                'images/robe_master/1.jpg',
+                'images/robe_master/2.jpg'
             ]
         };
-
 
         let currentImages = []; 
         let currentIndex = 0; 
@@ -346,12 +352,10 @@
         window.onload = () => { 
             lucide.createIcons(); 
             startEntranceAnimation(); 
-            
-            // Push initial state to history for back button handling
             history.replaceState({view: 'home'}, "");
         };
 
-        // --- Hardware Back Button Support ---
+        // دعم زر الرجوع في الهاتف لمنع الخروج
         window.onpopstate = (event) => {
             const modal = document.getElementById('modal');
             const galleryView = document.getElementById('galleryView');
@@ -370,7 +374,6 @@
 
         async function openCategory(cat, title) { 
             document.getElementById('galleryTitle').innerText = title; 
-            
             history.pushState({view: 'gallery', cat: cat}, "");
 
             gsap.to("#homeView", { opacity: 0, duration: 0.3, onComplete: () => { 
@@ -384,7 +387,6 @@
 
         function goHome(shouldPopHistory = true) { 
             if (shouldPopHistory) history.back();
-
             gsap.to("#galleryView", { opacity: 0, duration: 0.3, onComplete: () => { 
                 document.getElementById('galleryView').classList.add('hidden'); 
                 document.getElementById('homeView').classList.remove('hidden'); 
@@ -395,16 +397,12 @@
 
         function scrollToFooter() { document.getElementById('mainFooter').scrollIntoView({ behavior: 'smooth' }); }
 
-        /**
-         * تحميل الصور من الـ Data Object بدلاً من PHP
-         */
         function loadGalleryImages(cat) { 
             const grid = document.getElementById('imageGrid'); 
             const loader = document.getElementById('galleryLoader'); 
             grid.innerHTML = ''; 
             loader.classList.remove('hidden'); 
             
-            // محاكاة تأخير بسيط للجمالية
             setTimeout(() => {
                 const images = IMAGE_DATABASE[cat] || [];
                 renderGallery(images);
@@ -419,7 +417,8 @@
             images.forEach((img, idx) => { 
                 const item = document.createElement('div'); 
                 item.className = 'gallery-item'; 
-                item.onclick = () => openModal(idx); 
+                // نستخدم onclick بدلاً من addEventListener لضمان استجابة أسرع في الهاتف
+                item.setAttribute('onclick', `openModal(${idx})`);
                 item.innerHTML = `<img src="${img}" class="w-full h-full object-cover" loading="lazy">`; 
                 grid.appendChild(item); 
                 gsap.to(item, { opacity: 1, y: 0, duration: 0.5, delay: idx * 0.05 }); 
@@ -429,7 +428,6 @@
         function openModal(idx) { 
             currentIndex = idx; 
             history.pushState({view: 'modal'}, "");
-
             const modal = document.getElementById('modal'); 
             const filmstrip = document.getElementById('filmstrip'); 
             modal.style.display = 'flex'; 
@@ -448,9 +446,9 @@
 
         function updateModalView() { 
             const mainImg = document.getElementById('modalMainImg'); 
-            gsap.to(mainImg, { opacity: 0, scale: 0.95, duration: 0.15, onComplete: () => { 
+            gsap.to(mainImg, { opacity: 0, duration: 0.15, onComplete: () => { 
                 mainImg.src = currentImages[currentIndex]; 
-                gsap.to(mainImg, { opacity: 1, scale: 1, duration: 0.3 }); 
+                gsap.to(mainImg, { opacity: 1, duration: 0.3 }); 
             }}); 
             const thumbs = document.querySelectorAll('#filmstrip img'); 
             thumbs.forEach((t, i) => { 
@@ -458,10 +456,8 @@
                 else { t.classList.remove('active-thumb'); t.classList.add('opacity-40'); }
             }); 
             
-            // Generate WhatsApp Link
-            const baseUrl = window.location.origin + window.location.pathname.replace(/[^\/]*$/, '');
-            const imgPath = currentImages[currentIndex];
-            const waMsg = encodeURIComponent(`مرحباً مكتبة خواطر، أرغب بالاستفسار عن هذا المنتج: ${baseUrl}${imgPath}`);
+            const baseUrl = window.location.origin + window.location.pathname;
+            const waMsg = encodeURIComponent(`مرحباً مكتبة خواطر، أود الاستفسار عن هذا التصميم: ${baseUrl}#${currentImages[currentIndex]}`);
             document.getElementById('whatsappBtn').href = `https://wa.me/${WHATSAPP_NUM}?text=${waMsg}`; 
             
             const strip = document.getElementById('filmstrip'); 
@@ -474,12 +470,8 @@
         
         function closeModal(shouldPopHistory = true) { 
             if (shouldPopHistory) history.back();
-
-            gsap.to("#modal", { opacity: 0, duration: 0.3, onComplete: () => {
-                document.getElementById('modal').style.display = 'none'; 
-                document.body.style.overflow = 'auto'; 
-                gsap.set("#modal", {opacity: 1}); 
-            }});
+            document.getElementById('modal').style.display = 'none'; 
+            document.body.style.overflow = 'auto'; 
         }
     </script>
 </body>
