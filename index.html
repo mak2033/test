@@ -2,7 +2,6 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <!-- إعدادات العرض للهاتف لضمان عدم حدوث زووم تلقائي وتحسين اللمس -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     
     <title>مكتبة خواطر | Khawater Library</title>
@@ -11,8 +10,7 @@
     <meta name="description" content="أرقى دفاتر التخرج والأرواب المذهبة في الأردن. احتفل بتخرجك بفخامة تليق بك.">
     <meta property="og:title" content="مكتبة خواطر - Luxury Graduation Archive">
     <meta property="og:description" content="تصفح أرقى مجموعات دفاتر التخرج وأرواب الماستر والبكالوريوس. تميزك هو شغفنا.">
-    <meta property="og:image" content="https://raw.githubusercontent.com/username/repo/main/images/Main_notebook.jpg"> <!-- استبدل هذا الرابط برابط صورتك المرفوعة على جيت هاب -->
-    <meta property="og:url" content="https://your-username.github.io/your-repo-name/">
+    <meta property="og:image" content="images/Main_notebook.jpg"> 
     <meta property="og:type" content="website">
     <meta name="theme-color" content="#0F172A">
 
@@ -24,6 +22,7 @@
     <!-- Libraries -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- استدعاء Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
 
     <style>
@@ -39,7 +38,7 @@
             color: var(--navy);
             overflow-x: hidden;
             width: 100%;
-            -webkit-tap-highlight-color: transparent; /* يمنع ظهور المربع الأزرق عند اللمس في الهاتف */
+            -webkit-tap-highlight-color: transparent;
         }
 
         #heroHeader, .category-card { opacity: 0; transform: translateY(20px); }
@@ -84,7 +83,7 @@
             justify-content: space-between;
             padding: 1.5rem;
             color: white;
-            pointer-events: none; /* يسمح للنقرة بالمرور للبطاقة نفسها */
+            pointer-events: none; /* يسمح للنقرة بالمرور للبطاقة */
         }
 
         .social-bar {
@@ -95,7 +94,7 @@
             display: flex;
             flex-direction: column;
             gap: 15px;
-            z-index: 120;
+            z-index: 150;
         }
 
         @media (max-width: 767px) {
@@ -107,7 +106,7 @@
                 transform: none;
                 flex-direction: row;
                 justify-content: center;
-                background: rgba(255, 255, 255, 0.9);
+                background: rgba(255, 255, 255, 0.95);
                 backdrop-filter: blur(10px);
                 padding: 12px;
                 border-top: 1px solid #eee;
@@ -126,7 +125,10 @@
             justify-content: center;
             color: var(--navy);
             transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
         }
+
+        .social-icon:hover { background: var(--gold); color: white; transform: scale(1.1); }
 
         .gallery-item {
             aspect-ratio: 4/5;
@@ -141,7 +143,7 @@
         #modal {
             display: none;
             backdrop-filter: blur(25px);
-            background: rgba(15, 23, 42, 0.98);
+            background: rgba(15, 23, 42, 0.96);
             z-index: 200;
         }
 
@@ -156,22 +158,29 @@
 
         @keyframes floating { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-8px); } }
         .float-icon { animation: floating 4s ease-in-out infinite; }
+
+        /* لضمان ظهور الأيقونات بشكل صحيح */
+        i[data-lucide] {
+            width: 20px;
+            height: 20px;
+            stroke-width: 2.5;
+        }
     </style>
 </head>
 <body class="min-h-screen">
 
-    <!-- Social Sidebar -->
+    <!-- Social Sidebar (Left on PC, Bottom on Mobile) -->
     <div class="social-bar" id="socialBar">
-        <a href="https://instagram.com" target="_blank" class="social-icon"><i data-lucide="instagram" size="20"></i></a>
-        <a href="https://facebook.com" target="_blank" class="social-icon"><i data-lucide="facebook" size="20"></i></a>
-        <a href="tel:0780235959" class="social-icon"><i data-lucide="phone" size="20"></i></a>
+        <a href="https://instagram.com" target="_blank" class="social-icon" title="Instagram"><i data-lucide="instagram"></i></a>
+        <a href="https://facebook.com" target="_blank" class="social-icon" title="Facebook"><i data-lucide="facebook"></i></a>
+        <a href="tel:0780235959" class="social-icon" title="Call Us"><i data-lucide="phone"></i></a>
     </div>
 
     <!-- Navigation -->
-    <nav class="fixed top-0 w-full z-[110] px-4 md:px-8 py-4 flex justify-between items-center bg-white/90 backdrop-blur-xl border-b border-gray-100">
+    <nav class="fixed top-0 w-full z-[110] px-4 md:px-8 py-4 flex justify-between items-center bg-white/90 backdrop-blur-xl border-b border-gray-100 shadow-sm">
         <div class="flex items-center gap-2 cursor-pointer" onclick="goHome()">
             <div class="w-10 h-10 md:w-12 md:h-12 bg-navy rounded-xl md:rounded-2xl flex items-center justify-center text-gold border border-gold/30">
-                <i data-lucide="graduation-cap" class="float-icon" size="24"></i>
+                <i data-lucide="graduation-cap" class="float-icon"></i>
             </div>
             <div>
                 <h1 class="text-xl md:text-2xl font-black tracking-tighter text-navy leading-none">مكتبة <span class="text-gold">خواطر</span></h1>
@@ -185,8 +194,8 @@
                 <button onclick="scrollToFooter()" class="hover:text-gold transition-colors">اتصل بنا</button>
             </div>
             <button class="flex items-center gap-2 border-2 border-navy/10 px-3 py-1.5 md:px-4 md:py-2 rounded-lg md:rounded-xl hover:bg-navy hover:text-white transition-all">
-                <i data-lucide="languages" size="14"></i>
-                <span class="text-[10px] md:text-xs font-bold uppercase">EN</span>
+                <i data-lucide="languages" class="w-4 h-4"></i>
+                <span class="text-[10px] md:text-xs font-bold uppercase font-sans">EN</span>
             </button>
         </div>
     </nav>
@@ -197,12 +206,12 @@
         <!-- Home View -->
         <section id="homeView">
             <header class="text-center mb-12 md:mb-20" id="heroHeader">
-                <h2 class="text-3xl md:text-7xl font-black mb-4 md:mb-6 leading-tight">احتفل بتخرجك <br><span class="text-gold">بفخامة تليق بك</span></h2>
+                <h2 class="text-4xl md:text-7xl font-black mb-4 md:mb-6 leading-tight text-navy">احتفل بتخرجك <br><span class="text-gold">بفخامة تليق بك</span></h2>
                 <p class="text-gray-500 text-sm md:text-xl max-w-2xl mx-auto leading-relaxed px-4">أرقى دفاتر التخرج والأرواب المختارة بعناية لتخليد أجمل ذكرياتك الدراسية.</p>
             </header>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-10" id="cardGrid">
-                <!-- Notebook Card -->
+                <!-- Notebook -->
                 <div onclick="openCategory('notebook', 'دفاتر تخرج')" class="category-card group">
                     <img src="images/Main_notebook.jpg" class="card-bg w-full h-full object-cover" onerror="this.src='https://images.unsplash.com/photo-1544816155-12df9643f363?q=80&w=800'">
                     <div class="overlay"></div>
@@ -214,13 +223,13 @@
                         <div class="flex justify-between items-end">
                             <p class="text-gray-200 text-xs md:text-sm leading-relaxed max-w-[150px]">دون ذكرياتك في أرقى الدفاتر المذهبة.</p>
                             <div class="w-10 h-10 md:w-14 md:h-14 bg-white/20 backdrop-blur-md text-gold rounded-xl md:rounded-2xl flex items-center justify-center border border-white/20">
-                                <i data-lucide="chevron-left" size="20"></i>
+                                <i data-lucide="chevron-left"></i>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Bachelor Card -->
+                <!-- Bachelor -->
                 <div onclick="openCategory('robe_bachelor', 'أرواب تخرج')" class="category-card group">
                     <img src="images/Main_robe.jpg" class="card-bg w-full h-full object-cover" onerror="this.src='https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=80&w=800'">
                     <div class="overlay"></div>
@@ -232,13 +241,13 @@
                         <div class="flex justify-between items-end">
                             <p class="text-gray-200 text-xs md:text-sm leading-relaxed max-w-[150px]">أرواب مصممة بدقة عالية وأقمشة فاخرة.</p>
                             <div class="w-10 h-10 md:w-14 md:h-14 bg-white/20 backdrop-blur-md text-gold rounded-xl md:rounded-2xl flex items-center justify-center border border-white/20">
-                                <i data-lucide="chevron-left" size="20"></i>
+                                <i data-lucide="chevron-left"></i>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Master Card -->
+                <!-- Master -->
                 <div onclick="openCategory('robe_master', 'أرواب الماستر')" class="category-card group">
                     <img src="images/Main_robe_master.jpg" class="card-bg w-full h-full object-cover" onerror="this.src='https://images.unsplash.com/photo-1541339907198-e08756ebafe3?q=80&w=800'">
                     <div class="overlay"></div>
@@ -250,7 +259,7 @@
                         <div class="flex justify-between items-end">
                             <p class="text-gray-200 text-xs md:text-sm leading-relaxed max-w-[150px]">تميز بتفاصيل مذهبة تعكس هيبة إنجازك.</p>
                             <div class="w-10 h-10 md:w-14 md:h-14 bg-white/20 backdrop-blur-md text-gold rounded-xl md:rounded-2xl flex items-center justify-center border border-white/20">
-                                <i data-lucide="chevron-left" size="20"></i>
+                                <i data-lucide="chevron-left"></i>
                             </div>
                         </div>
                     </div>
@@ -262,8 +271,8 @@
         <section id="galleryView" class="hidden">
             <div class="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
                 <div class="flex items-center gap-4">
-                    <button onclick="goHome()" class="w-10 h-10 md:w-14 md:h-14 rounded-xl border-2 border-gray-100 flex items-center justify-center hover:bg-navy hover:text-white transition-all bg-white">
-                        <i data-lucide="arrow-right" size="20"></i>
+                    <button onclick="goHome()" class="w-10 h-10 md:w-14 md:h-14 rounded-xl border-2 border-gray-100 flex items-center justify-center hover:bg-navy hover:text-white transition-all bg-white shadow-sm">
+                        <i data-lucide="arrow-right"></i>
                     </button>
                     <h2 id="galleryTitle" class="text-2xl md:text-4xl font-black text-navy">اسم القسم</h2>
                 </div>
@@ -283,65 +292,82 @@
         <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-12">
             <div class="space-y-4">
                 <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 bg-white/10 rounded-xl flex items-center justify-center text-gold"><i data-lucide="graduation-cap" size="20"></i></div>
+                    <div class="w-10 h-10 bg-white/10 rounded-xl flex items-center justify-center text-gold"><i data-lucide="graduation-cap"></i></div>
                     <h3 class="text-xl font-black">مكتبة <span class="text-gold">خواطر</span></h3>
                 </div>
-                <p class="text-gray-400 text-sm">أرقى مستلزمات التخرج في الأردن. تميزك هو شغفنا.</p>
+                <p class="text-gray-400 text-sm leading-relaxed">أرقى مستلزمات التخرج في الأردن. تميزك في يومك الكبير هو شغفنا الأول.</p>
+                <!-- الروابط الاجتماعية في الفوتر -->
+                <div class="flex gap-4 pt-2">
+                    <a href="https://instagram.com" target="_blank" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-gold transition-colors"><i data-lucide="instagram" class="w-4 h-4"></i></a>
+                    <a href="https://facebook.com" target="_blank" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-gold transition-colors"><i data-lucide="facebook" class="w-4 h-4"></i></a>
+                    <a href="tel:0780235959" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-gold transition-colors"><i data-lucide="phone" class="w-4 h-4"></i></a>
+                </div>
             </div>
             <div>
-                <h4 class="text-gold font-bold mb-4">روابط سريعة</h4>
-                <ul class="text-gray-400 text-sm space-y-2">
-                    <li><button onclick="goHome()">الرئيسية</button></li>
-                    <li><button onclick="scrollToFooter()">تواصل معنا</button></li>
+                <h4 class="text-gold font-bold mb-4 uppercase tracking-widest text-xs">روابط سريعة</h4>
+                <ul class="text-gray-400 text-sm space-y-3">
+                    <li><button onclick="goHome()" class="hover:text-white transition-colors">الصفحة الرئيسية</button></li>
+                    <li><button onclick="scrollToFooter()" class="hover:text-white transition-colors">تواصل معنا</button></li>
+                    <li><button onclick="openCategory('notebook', 'دفاتر تخرج')" class="hover:text-white transition-colors">دفاتر التخرج</button></li>
                 </ul>
             </div>
             <div>
-                <h4 class="text-gold font-bold mb-4">اتصل بنا</h4>
+                <h4 class="text-gold font-bold mb-4 uppercase tracking-widest text-xs">اتصل بنا</h4>
                 <p class="text-gray-400 text-sm">عمان، الأردن</p>
-                <p class="text-white font-bold mt-2" dir="ltr">0780235959</p>
+                <p class="text-white font-bold mt-2 text-lg font-sans" dir="ltr">0780235959</p>
             </div>
         </div>
         <div class="max-w-7xl mx-auto mt-12 md:mt-16 pt-8 border-t border-white/5 text-center text-gray-500 text-[10px] md:text-sm">
-            &copy; 2024 مكتبة خواطر. جميع الحقوق محفوظة.
+            &copy; 2026 مكتبة خواطر. جميع الحقوق محفوظة.
         </div>
     </footer>
 
     <!-- Modal Viewer -->
-    <div id="modal" class="fixed inset-0 flex flex-col items-center justify-center p-4">
-        <button onclick="closeModal()" class="absolute top-4 right-4 text-white bg-white/10 p-3 rounded-xl z-50"><i data-lucide="x" size="24"></i></button>
-        <div class="relative w-full max-w-5xl flex items-center justify-center h-[50vh] md:h-[65vh]">
-            <button onclick="prevImage()" class="absolute left-2 md:-left-20 z-10 bg-white/10 p-3 md:p-5 rounded-full text-white"><i data-lucide="chevron-left" size="24"></i></button>
+    <div id="modal" class="fixed inset-0 flex flex-col items-center justify-center p-4" onclick="handleOutsideClick(event)">
+        <!-- زر الإغلاق -->
+        <button onclick="closeModal()" class="absolute top-4 right-4 text-white bg-white/10 p-3 rounded-xl z-[220] hover:bg-white/20 transition-colors">
+            <i data-lucide="x" size="24"></i>
+        </button>
+
+        <!-- مسرح الصورة -->
+        <div class="relative w-full max-w-5xl flex items-center justify-center h-[50vh] md:h-[65vh]" onclick="event.stopPropagation()">
+            <button onclick="prevImage()" class="absolute left-2 md:-left-20 z-10 bg-white/10 hover:bg-white/20 p-3 md:p-5 rounded-full text-white transition-all">
+                <i data-lucide="chevron-left" size="24"></i>
+            </button>
+            
             <img id="modalMainImg" src="" class="max-h-full max-w-full object-contain rounded-2xl shadow-2xl border-2 border-white/10 transition-all duration-300">
-            <button onclick="nextImage()" class="absolute right-2 md:-right-20 z-10 bg-white/10 p-3 md:p-5 rounded-full text-white"><i data-lucide="chevron-right" size="24"></i></button>
+            
+            <button onclick="nextImage()" class="absolute right-2 md:-right-20 z-10 bg-white/10 hover:bg-white/20 p-3 md:p-5 rounded-full text-white transition-all">
+                <i data-lucide="chevron-right" size="24"></i>
+            </button>
         </div>
-        <div class="mt-8 relative z-50">
+
+        <!-- زر واتساب -->
+        <div class="mt-8 relative z-[220]" onclick="event.stopPropagation()">
             <a id="whatsappBtn" href="#" target="_blank" class="btn-whatsapp px-8 py-4 rounded-xl text-white font-black flex items-center gap-3 active:scale-95 transition-transform">
-                <i data-lucide="message-circle" size="20"></i>اطلب عبر واتساب
+                <i data-lucide="message-circle" size="22"></i>اطلب عبر واتساب
             </a>
         </div>
-        <div class="absolute bottom-0 w-full bg-slate-900/90 p-4 border-t border-white/5 backdrop-blur-md">
+
+        <!-- شريط الصور السفلي -->
+        <div class="absolute bottom-0 w-full bg-slate-900/90 p-4 border-t border-white/5 backdrop-blur-md" onclick="event.stopPropagation()">
             <div id="filmstrip" class="filmstrip-container flex gap-3 overflow-x-auto pb-2 px-2 scroll-smooth"></div>
         </div>
     </div>
 
     <script>
         /**
-         * داتا الصور - GitHub Pages لا يدعم PHP لذا يجب تعريف الملفات هنا يدوياً.
-         * تأكد أن أسماء الصور مطابقة تماماً لحالة الأحرف (Lowercase/Uppercase).
+         * قاعدة بيانات الصور (Static Data for GitHub Pages)
          */
         const IMAGE_DATABASE = {
             notebook: [
-                'images/notebook/1.jpg',
-                'images/notebook/2.jpg',
-                'images/notebook/3.jpg'
+                'images/notebook/1.jpg', 'images/notebook/2.jpg', 'images/notebook/3.jpg', 'images/notebook/4.jpg'
             ],
             robe_bachelor: [
-                'images/robe_bachelor/1.jpg',
-                'images/robe_bachelor/2.jpg'
+                'images/robe_bachelor/1.jpg', 'images/robe_bachelor/2.jpg', 'images/robe_bachelor/3.jpg'
             ],
             robe_master: [
-                'images/robe_master/1.jpg',
-                'images/robe_master/2.jpg'
+                'images/robe_master/1.jpg', 'images/robe_master/2.jpg'
             ]
         };
 
@@ -350,12 +376,15 @@
         const WHATSAPP_NUM = '962780235959';
 
         window.onload = () => { 
-            lucide.createIcons(); 
+            // تهيئة الأيقونات
+            if (window.lucide) {
+                lucide.createIcons(); 
+            }
             startEntranceAnimation(); 
             history.replaceState({view: 'home'}, "");
         };
 
-        // دعم زر الرجوع في الهاتف لمنع الخروج
+        // دعم زر الرجوع في الهاتف
         window.onpopstate = (event) => {
             const modal = document.getElementById('modal');
             const galleryView = document.getElementById('galleryView');
@@ -366,6 +395,15 @@
                 goHome(false);
             }
         };
+
+        /**
+         * ميزة إغلاق المودال عند النقر في الخارج
+         */
+        function handleOutsideClick(e) {
+            if (e.target.id === 'modal') {
+                closeModal();
+            }
+        }
 
         function startEntranceAnimation() { 
             gsap.to("#heroHeader", { opacity: 1, y: 0, duration: 1, ease: "power4.out" }); 
@@ -417,9 +455,8 @@
             images.forEach((img, idx) => { 
                 const item = document.createElement('div'); 
                 item.className = 'gallery-item'; 
-                // نستخدم onclick بدلاً من addEventListener لضمان استجابة أسرع في الهاتف
                 item.setAttribute('onclick', `openModal(${idx})`);
-                item.innerHTML = `<img src="${img}" class="w-full h-full object-cover" loading="lazy">`; 
+                item.innerHTML = `<img src="${img}" class="w-full h-full object-cover" loading="lazy" onerror="this.src='https://via.placeholder.com/400x500?text=Product'">`; 
                 grid.appendChild(item); 
                 gsap.to(item, { opacity: 1, y: 0, duration: 0.5, delay: idx * 0.05 }); 
             }); 
@@ -456,6 +493,7 @@
                 else { t.classList.remove('active-thumb'); t.classList.add('opacity-40'); }
             }); 
             
+            // رابط الواتساب مع رابط الموقع لمزيد من الثقة
             const baseUrl = window.location.origin + window.location.pathname;
             const waMsg = encodeURIComponent(`مرحباً مكتبة خواطر، أود الاستفسار عن هذا التصميم: ${baseUrl}#${currentImages[currentIndex]}`);
             document.getElementById('whatsappBtn').href = `https://wa.me/${WHATSAPP_NUM}?text=${waMsg}`; 
